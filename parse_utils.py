@@ -1,3 +1,5 @@
+import json
+
 CURRENT_FILE = "/home/kcup/python/graph/output"
 
 def group_totals(storage):
@@ -25,7 +27,7 @@ def group_totals(storage):
             'space': [sum(s_total)]}
     return all_totals
 
-def space_percent(all_totals, sel_out="dict"):
+def space_percent(all_totals, sel_out="dict", sub_output_type="list"):
     '''
     Takes the list of values and returns the % value.
     Input should be a dict with the following
@@ -49,7 +51,7 @@ def space_percent(all_totals, sel_out="dict"):
         all_totals['used'],
         ]
         all_totals = rn_list
-        
+
     return all_totals
 
 def str_file_open(current_file=CURRENT_FILE):
@@ -59,3 +61,26 @@ def str_file_open(current_file=CURRENT_FILE):
 def convert_to_tb(space_bytes):
     space_TB = space_bytes / 1024 / 1024 / 1024 / 1024
     return space_TB
+
+def parse_storage_csv(storage_systems, file_to_parse=CURRENT_FILE,
+    output_type='dict'):
+    open_file = open(file_to_parse, 'r')
+    storage_sys_total = {}
+
+    for storage_system in storage:
+        for line in open_file:
+            lsplit = line.split(',')
+            if lsplit[1] in storage_system:
+                storage_sys_total[storage_system] = {
+                        'name': storage_system,
+                        'free': int(lsplit[7]),
+                        'used': int(lsplit[9]),
+                        'space': sum(int(lsplit[7] + int(lsplit[9])))
+                        }
+    open_file.close()
+
+    if ouput_type == "json":
+        with open('storage_sys_total.json', 'w') as fp:
+            json.dump(storage_sys_total, fp)
+
+    return storage_sys_total

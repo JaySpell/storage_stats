@@ -38,12 +38,13 @@ def pie_it(percents):
     output_file("pie.html")
     show(p)
 
-def piechart(percents):
+def piechart(percents, **kwargs):
     plot = None
+    chart_title = kwargs.get('title', 'Default Chart')
 
     # create a figure and add a wedge glyph to it
     plot = figure(toolbar_location=None,
-                title='test title',
+                title=chart_title,
                 x_range=(-1.5, 3),
                 y_range=(-2, 2),
                 min_border=10,
@@ -58,7 +59,7 @@ def piechart(percents):
     print total
     print(percents)
 
-    colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+    colors = ["#16CC62", "#63667F"]
     wedges = []
     wedge_sum = 0
     for i, (key, val) in enumerate(percents.iteritems()):
@@ -78,7 +79,7 @@ def piechart(percents):
                    start_angle=wedge['start'],
                    end_angle=wedge['end'],
                    color=wedge['color'],
-                   line_color='black',
+                   line_color='white',
                    radius_units='data')
     plot.legend.glyph_width = 10
     output_file("pie.html")
@@ -92,4 +93,5 @@ if __name__ == "__main__":
     a_dict = parse_utils.group_totals(group_list)
     b = parse_utils.space_percent(a_dict)
     print(b)
-    piechart(b)
+    title = 'Tier 1'
+    piechart(b, title='Tier 1')
