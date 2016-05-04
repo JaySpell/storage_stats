@@ -43,10 +43,9 @@ def piechart(percents, **kwargs):
     chart_title = kwargs.get('title', 'Default Chart')
 
     # create a figure and add a wedge glyph to it
-    plot = figure(toolbar_location=None,
-                title=chart_title,
-                x_range=(-1.5, 3),
-                y_range=(-2, 2),
+    plot = figure(title=chart_title,
+                x_range=(-1, 1.1),
+                y_range=(-1, 1.1),
                 min_border=10,
                 min_border_left=50,
                 title_text_font_size='12pt')
@@ -59,7 +58,7 @@ def piechart(percents, **kwargs):
     print total
     print(percents)
 
-    colors = ["#16CC62", "#63667F"]
+    colors = ["#FF2F27", "#0B75CC"]
     wedges = []
     wedge_sum = 0
     for i, (key, val) in enumerate(percents.iteritems()):

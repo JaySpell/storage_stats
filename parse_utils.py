@@ -27,6 +27,29 @@ def group_totals(storage):
             'space': [sum(s_total)]}
     return all_totals
 
+def storage_total(storage):
+    free_total = int(0)
+    used_total = int(0)
+    space_total = int(0)
+    f_total = []
+    u_total = []
+    s_total = []
+
+    with open(CURRENT_FILE) as a_file:
+        for line in a_file:
+            lsplit = line.split(',')
+            if lsplit[1] in storage:
+                free_total = int(free_total) + int(lsplit[7])
+                used_total = int(used_total) + int(lsplit[9])
+                space_total = free_total + used_total
+        f_total.append(free_total)
+        u_total.append(used_total)
+        s_total.insert(0, space_total)
+        all_totals = {'free': [sum(f_total)],
+                'used': [sum(u_total)],
+                'space': [sum(s_total)]}
+    return all_totals
+
 def space_percent(all_totals, sel_out="dict", sub_output_type="list"):
     '''
     Takes the list of values and returns the % value.
@@ -39,11 +62,12 @@ def space_percent(all_totals, sel_out="dict", sub_output_type="list"):
     '''
     s_totals = all_totals['space'][0]
 
-    r_percent = lambda x: float(x)/float(s_totals)
-    n_list = list(map(r_percent, all_totals['free']))
-    all_totals['free'] = n_list.pop(0)
-    n_list = list(map(r_percent, all_totals['used']))
-    all_totals['used'] = n_list.pop(0)
+    if not s_totals == 0:
+        r_percent = lambda x: float(x)/float(s_totals)
+        n_list = list(map(r_percent, all_totals['free']))
+        all_totals['free'] = n_list.pop(0)
+        n_list = list(map(r_percent, all_totals['used']))
+        all_totals['used'] = n_list.pop(0)
 
     if sel_out == "list":
         rn_list = [
