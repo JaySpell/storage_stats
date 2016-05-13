@@ -27,7 +27,7 @@ def group_totals(storage):
             'space': [sum(s_total)]}
     return all_totals
 
-def storage_total(storage):
+def storage_total(storage, current_file):
     free_total = int(0)
     used_total = int(0)
     space_total = int(0)
@@ -35,7 +35,7 @@ def storage_total(storage):
     u_total = []
     s_total = []
 
-    with open(CURRENT_FILE) as a_file:
+    with open(current_file) as a_file:
         for line in a_file:
             lsplit = line.split(',')
             if lsplit[1] in storage:

@@ -4,7 +4,7 @@ import json
 import os
 
 TIER_CONFIG = '/home/kcup/python/graph/json/tier.json'
-
+CURRENT_FILE = '/home/kcup/python/graph/output'
 
 def create_charts(**kwargs):
     '''
@@ -19,7 +19,8 @@ def create_charts(**kwargs):
     #Get the totals for all systems in tier
     all_tiers_totals = {}
     for tiers in storage_tiers['storage_tiers'].iteritems():
-        all_tiers_totals[tiers[0]] = parse_utils.storage_total(tiers[1])
+        all_tiers_totals[tiers[0]] = parse_utils.storage_total(tiers[1],
+                CURRENT_FILE)
 
     #Convert to percentages
     all_tiers_percents = {}
