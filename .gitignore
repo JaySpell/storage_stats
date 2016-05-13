@@ -1,4 +1,9 @@
-*html
 *pyc
 output
 tmp*
+legend.html
+pie.html
+stats.html
+tier_one.html
+tier_three.html
+tier_two.html
