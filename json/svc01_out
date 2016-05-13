@@ -1,0 +1,10 @@
+{"storage_report":
+  {
+    "str_sys": "tmcsvc01",
+    "pools":
+        {
+          "tmcflash01": {"used": 123, "free": 456},
+          "tmcflash03": {"used": 567, "free": 9810}
+        }
+      }
+}

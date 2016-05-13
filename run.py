@@ -5,9 +5,6 @@ import os
 
 TIER_CONFIG = '/home/kcup/python/graph/json/tier.json'
 
-def get_latest_file():
-    pass
-    #return newest = min(glob.iglob('json/*.json'), key=os.path.getctime)
 
 def create_charts(**kwargs):
     '''

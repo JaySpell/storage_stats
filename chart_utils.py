@@ -9,6 +9,7 @@ def piechart(percents, **kwargs):
 
     # create a figure and add a wedge glyph to it
     plot = figure(title=chart_title,
+                toolbar_location=None,
                 x_range=(-1, 1.1),
                 y_range=(-1, 1.1),
                 min_border=10,
@@ -19,7 +20,7 @@ def piechart(percents, **kwargs):
     plot.yaxis.visible = None
     plot.ygrid.grid_line_color = None
     total = percents.pop('space')[0]
-    colors = ["#FF2F27", "#0B75CC"]
+    colors = ["#F84337", "#5350C5"]
     wedges = []
     wedge_sum = 0
 
@@ -45,4 +46,4 @@ def piechart(percents, **kwargs):
     plot.legend.glyph_width = 10
     file_name = chart_title + ".html"
     output_file(file_name)
-    show(plot)
+    save(plot)
