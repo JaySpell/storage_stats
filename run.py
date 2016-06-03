@@ -2,9 +2,10 @@ import parse_utils
 import chart_utils
 import json
 import os
+import config
 
-TIER_CONFIG = '/home/kcup/python/graph/json/tier.json'
-CURRENT_FILE = '/home/kcup/python/graph/output'
+TIER_CONFIG = config.TIER_CONFIG
+CURRENT_FILE = config.CURRENT_FILE
 
 def create_charts(**kwargs):
     '''
@@ -27,9 +28,14 @@ def create_charts(**kwargs):
     for tiers in all_tiers_totals.iteritems():
         all_tiers_percents[tiers[0]] = parse_utils.space_percent(tiers[1])
 
-    #Create charts
+    #Create pie charts
     for tier in all_tiers_percents.iteritems():
         chart_utils.piechart(tier[1], title=tier[0])
+
+    #Create donut charts
+
+    #Create growth charts
+
 
 if __name__ == "__main__":
     create_charts()

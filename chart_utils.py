@@ -1,6 +1,10 @@
 from bokeh.plotting import *
 from bokeh.models import *
 from numpy import pi
+from bokeh.charts import Donut, show, output_file
+from bokeh.charts.utils import df_from_json
+
+import pandas as pd
 
 
 def piechart(percents, **kwargs):
@@ -20,7 +24,7 @@ def piechart(percents, **kwargs):
     plot.yaxis.visible = None
     plot.ygrid.grid_line_color = None
     total = percents.pop('space')[0]
-    colors = ["#F84337", "#5350C5"]
+    colors = ["#726F78", "#5350C5"]
     wedges = []
     wedge_sum = 0
 
@@ -47,3 +51,32 @@ def piechart(percents, **kwargs):
     file_name = chart_title + ".html"
     output_file(file_name)
     save(plot)
+
+def donutchart(*args, **kwargs):
+    #get info from submitted data
+    data = kwargs.get('data', 'None')
+    ids = kwargs.get('ids', 'None')
+    vals = kwargs.get('vals', 'None')
+    val_name = kwargs.get('val_name', 'None')
+    v_name = kwargs.get('v_name', 'None')
+    out_file = kwargs.get('out_file', 'None')
+
+    if vals or data or ids or val_name == 'None':
+        return "Data must be submitted"
+
+    df = df_from_json(data)
+    df = df.sort("total", ascending=False)
+    df = pd.melt(df, id_vars=[ids],
+                value_vars=[vals],
+                value_name=val_name,
+                var_name=v_name)
+    d = Donut(df, label=[ids, v_name],
+            values=v_name,
+            text_font_size='8pt',
+            hover_text='vals')
+
+    output_file(out_file)
+    save(d)
+
+def growthchart(*args, **kwargs):
+    pass
