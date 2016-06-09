@@ -18,7 +18,11 @@ def piechart(percents, **kwargs):
                 y_range=(-1, 1.1),
                 min_border=10,
                 min_border_left=50,
-                title_text_font_size='12pt')
+                title_text_font_size='12pt',
+                width=450,
+                height=450)
+    plot.outline_line_width = 0
+    plot.outline_line_color = "white"
     plot.xaxis.visible = None
     plot.xgrid.grid_line_color = None
     plot.yaxis.visible = None
@@ -40,7 +44,7 @@ def piechart(percents, **kwargs):
 
     plot._renderers = []
     for i, wedge in enumerate(wedges):
-        plot.wedge(x=0, y=0, radius=1,
+        plot.wedge(x=0, y=0, radius=0.75,
                    legend=wedge['name'],
                    start_angle=wedge['start'],
                    end_angle=wedge['end'],
@@ -48,7 +52,7 @@ def piechart(percents, **kwargs):
                    line_color='white',
                    radius_units='data')
     plot.legend.glyph_width = 10
-    file_name = chart_title + ".html"
+    file_name = chart_title.replace(' ', '') + ".html"
     output_file(file_name)
     save(plot)
 

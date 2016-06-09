@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{%- for tier in tiers %}
+  <div class="col-md-4">
+    {%- for html_content in tier %}
+      {{ html_content }}
+    {%- endfor %}
+  </div>
+{%- endfor %}
+{% endblock %}

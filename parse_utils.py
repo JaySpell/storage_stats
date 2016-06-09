@@ -1,6 +1,8 @@
 import json
+import config
 
-CURRENT_FILE = "/home/kcup/python/graph/output"
+CURRENT_FILE = config.CURRENT_FILE
+TIER_CONFIG = config.TIER_CONFIG
 
 def group_totals(storage):
     free_total = int(0)
@@ -108,3 +110,6 @@ def parse_storage_csv(storage_systems, file_to_parse=CURRENT_FILE,
             json.dump(storage_sys_total, fp)
 
     return storage_sys_total
+
+def combine_html():
+    pass

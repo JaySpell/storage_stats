@@ -1,6 +1,6 @@
 {
   "storage_tiers": {
-    "tier_one":
+    "Tier One":
       [
         "tmcflash01",
         "tmcflash02",
@@ -8,7 +8,7 @@
         "tmcflash04",
         "tmcds8800_mdg01"
       ],
-    "tier_two":
+    "Tier Two":
       [
         "tmcv7000-1",
         "tmcv7000-2",
@@ -19,7 +19,7 @@
         "tmcv7000-7",
         "tmcv7000-8"
       ],
-    "tier_three":
+    "Tier Three":
       [
         "TMC-DS3500-01",
         "TMC-DS3500-02",
