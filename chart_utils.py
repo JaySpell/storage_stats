@@ -3,9 +3,11 @@ from bokeh.models import *
 from numpy import pi
 from bokeh.charts import Donut, show, output_file
 from bokeh.charts.utils import df_from_json
-
 import pandas as pd
+import numpy as np
 
+def datetime(x):
+    return np.array(x, dtype=np.datetime64)
 
 def piechart(percents, **kwargs):
     plot = None
@@ -83,4 +85,11 @@ def donutchart(*args, **kwargs):
     save(d)
 
 def growthchart(*args, **kwargs):
-    pass
+    p1 = figure(x_axis_type = "datatime",
+                tools="pan, wheel_zoom, box_zoom, reset",
+                height=700,
+                toolbar_location=right)
+    p1.title = "One Year of Growth"
+    p1.grid.grid_line_alpha = 0.5
+    p1.xaxis.axis_label = 'Month'
+    p1.yaxis.axis_label = 'Space'

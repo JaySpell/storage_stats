@@ -1,0 +1,47 @@
+{
+  "tmcsvc01": {
+    "Tier One": [
+      "tmcflash01",
+      "tmcflash03",
+      "tmcflash04",
+      "tmcds8800_mdg01"
+    ],
+    "Tier Two": [
+      "tmcv7000-8"
+    ],
+    "Tier Three": [
+    ]
+  },
+  "tmcsvc02": {
+    "Tier One": [
+      "tmcflash02"
+    ],
+    "Tier Two": [
+      "tmcv7000-1_msar_mirrors_only",
+      "tmcv7000-2",
+      "tmcv7000-3",
+      "tmcv7000-4",
+      "tmcv7000-5",
+      "tmcv7000-6",
+      "tmcv7000-7",
+    ],
+    "Tier Three": [
+      "TMC-DS3500-01",
+      "TMC-DS3500-02",
+      "TMC-DS3500-03",
+      "TMC-DS3500-04"
+    ]
+  },
+  "mcsvc01": {
+    "Tier One": [
+    ],
+    "Tier Two": [
+      "mcv7000-1"
+    ],
+    "Tier Three": [
+      "mcDS3501_mdg01",
+      "mcDS3502_mdg01",
+      "mcDS3503_mdg01"
+    ]
+  }
+}
