@@ -1,3 +1,4 @@
+growth_*
 *pyc
 tags
 output
@@ -9,6 +10,7 @@ tier_one.html
 tier_three.html
 tier_two.html
 config.py
+storage_stats.html
 TierOne.html
 TierTwo.html
 TierThree.html
@@ -16,3 +18,4 @@ tier_one.html
 tier_two.html
 tier_three.html
 test*
+pool_history.csv

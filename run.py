@@ -38,7 +38,7 @@ def create_charts(**kwargs):
     for tiers in all_tiers_totals.iteritems():
         all_tiers_percents[tiers[0]] = parse_utils.space_percent(tiers[1])
 
-    #Create pie charts
+    '''Create pie charts'''
     for tier in all_tiers_percents.iteritems():
         chart_utils.piechart(tier[1], title=tier[0])
 
@@ -67,14 +67,37 @@ def create_charts(**kwargs):
         tier_output.append(updated_output)
         updated_output = []
 
+    '''
+    Create growth charts
+    '''
+
+    #Get last years information
+    last_year = parse_utils.get_last_year()
+
+    #Parse data
+    for tier_name, dates in last_year.iteritems():
+        #Sort by date
+        all_dates = sorted(dates.keys())
+        used_space = []
+
+        #Get used space
+        for date in sorted(dates):
+            used_space.append(dates[date][0])
+
+        #Convert to TB from the GB
+        used_space = map(parse_utils.convert_gb_tb, used_space)
+
+        #Create growth charts using data
+        chart_utils.growthchart(tiername=tier_name,
+                    dates=all_dates, used=used_space)
+
+
     #Render output in jinja2
     t = env.get_template('tiers.html').render(tiers=tier_output)
 
     #Open output file / insert new content into output file
     with open(OUTPUT_FILE, 'w') as o_file:
         o_file.write(t)
-
-    #Create growth charts
 
 if __name__ == "__main__":
     create_charts()

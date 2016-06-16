@@ -91,6 +91,10 @@ def convert_to_tb(space_bytes):
     space_TB = space_bytes / 1024 / 1024 / 1024 / 1024
     return space_TB
 
+def convert_gb_tb(space_gb):
+    space_TB = space_gb / 1024
+    return int(space_TB)
+
 def parse_storage_csv(storage_systems, file_to_parse=CURRENT_FILE,
     output_type='dict'):
     open_file = open(file_to_parse, 'r')
@@ -122,22 +126,16 @@ def get_last_year():
     data_last_year = find_data_year_old()
 
     #Get info per SVC
-    svc_stats = _get_svc_stats(data_last_year)
+    #svc_stats = _get_svc_stats(data_last_year)
 
     #Get info per tier
     tier_stats = _get_tier_stats(data_last_year)
 
-    last_year = {"last_year": [
+    '''last_year = {"last_year": [
                     {"svc": svc_stats},
                     {"tier": tier_stats}
-                ]}
-
-    if return_type == "tier":
-        return "tier"
-    elif return_type == "svc":
-        return "svc"
-    else:
-        return "Invalid return type.."
+                ]}'''
+    return tier_stats
 
 def _get_svc_stats(data_set):
     '''with open(SVC_FILE, 'r') as svc_json:
@@ -145,18 +143,32 @@ def _get_svc_stats(data_set):
         for '''
 
 def _get_tier_stats(data_set):
-    tier_return = []
+    sorted_tiers = []
+    tier_return = {}
 
     with open(TIER_CONFIG, 'r') as tier_json:
         tiers = json.load(tier_json)
-        t_data = []
-        for tier in tiers['storage_tiers'].iteritems():
-            for a_tier in tier[1]:
-                for row in data_set:
-                    name = row.split(',')[0]
-                    if name in a_tier:
-                        t_data.append(row)
-                tier_return.append(t_data)
+
+    t_data = []
+    for tier, storage in tiers['storage_tiers'].iteritems():
+        tier_return[tier] = {}
+        for row in data_set:
+            name = row.split(',')[0]
+            if name in storage:
+                row_date = datetime.datetime.strptime(row.split(',')[1],
+                    "%Y-%m-%d")
+                if row_date not in tier_return[tier]:
+                    tier_return[tier][row_date] = [
+                            row.split(',')[5],
+                            row.split(',')[3]
+                        ]
+                tier_return[tier][row_date] = [
+                        float(tier_return[tier][row_date][0]) +
+                                float(row.split(',')[5]),
+                        float(tier_return[tier][row_date][1]) +
+                                float(row.split(',')[3])
+                    ]
+
     return tier_return
 
 def find_data_year_old(filename=ARCHIVE_FILE):

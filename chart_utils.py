@@ -5,9 +5,8 @@ from bokeh.charts import Donut, show, output_file
 from bokeh.charts.utils import df_from_json
 import pandas as pd
 import numpy as np
-
-def datetime(x):
-    return np.array(x, dtype=np.datetime64)
+import datetime
+from bokeh.embed import components
 
 def piechart(percents, **kwargs):
     plot = None
@@ -84,12 +83,26 @@ def donutchart(*args, **kwargs):
     output_file(out_file)
     save(d)
 
-def growthchart(*args, **kwargs):
-    p1 = figure(x_axis_type = "datatime",
-                tools="pan, wheel_zoom, box_zoom, reset",
-                height=700,
-                toolbar_location=right)
-    p1.title = "One Year of Growth"
-    p1.grid.grid_line_alpha = 0.5
-    p1.xaxis.axis_label = 'Month'
-    p1.yaxis.axis_label = 'Space'
+def growthchart(tiername, dates, used, *args, **kwargs):
+    plot = figure(tools="pan, wheel_zoom, box_zoom, resize",
+                plot_width=900,
+                plot_height=600,
+                toolbar_location="above",
+                x_axis_type="datetime")
+    plot.title = "One Year of Growth: " + tiername
+    plot.grid.grid_line_alpha = 0.5
+    plot.xaxis.axis_label = 'Month'
+    plot.yaxis.axis_label = 'Space in TB'
+    plot.line(dates, used, color="#5350C5", line_width=2)
+    plot.ygrid.grid_line_color = "#726F78"
+    plot.ygrid.grid_line_dash = [6, 4]
+    plot.ygrid.grid_line_alpha = 0.5
+    plot.xgrid.grid_line_color = None
+
+
+    output_file("/home/kcup/python/graph/growth_" + tiername + ".html",
+        title="growth")
+
+    #script, div = components(vplot(p1))
+    #return script, div
+    show(vplot(plot))
