@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block content %}
+{% block pie %}
 {%- for tier in tiers %}
   <div class="col-md-4">
     {%- for html_content in tier %}
@@ -7,4 +7,15 @@
     {%- endfor %}
   </div>
 {%- endfor %}
+{% endblock %}
+{% block graphs %}
+  {%- for tier_name, values in graphs.iteritems() %}
+    {%- for graph in values %}
+      <div class="row">
+        <div class="col-md-9">
+          {{ graph }}
+        </div>
+      </div>
+    {%- endfor %}
+  {%- endfor %}
 {% endblock %}

@@ -84,7 +84,7 @@ def donutchart(*args, **kwargs):
     save(d)
 
 def growthchart(tiername, dates, used, *args, **kwargs):
-    plot = figure(tools="pan, wheel_zoom, box_zoom, resize",
+    plot = figure(tools="pan, wheel_zoom, box_zoom, resize, save",
                 plot_width=900,
                 plot_height=600,
                 toolbar_location="above",
@@ -103,6 +103,7 @@ def growthchart(tiername, dates, used, *args, **kwargs):
     output_file("/home/kcup/python/graph/growth_" + tiername + ".html",
         title="growth")
 
-    #script, div = components(vplot(p1))
-    #return script, div
-    show(vplot(plot))
+    plots = (plot)
+    script, div = components(plots)
+
+    return script, div

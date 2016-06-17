@@ -75,6 +75,7 @@ def create_charts(**kwargs):
     last_year = parse_utils.get_last_year()
 
     #Parse data
+    tier_graphs = {}
     for tier_name, dates in last_year.iteritems():
         #Sort by date
         all_dates = sorted(dates.keys())
@@ -88,12 +89,19 @@ def create_charts(**kwargs):
         used_space = map(parse_utils.convert_gb_tb, used_space)
 
         #Create growth charts using data
-        chart_utils.growthchart(tiername=tier_name,
-                    dates=all_dates, used=used_space)
+        tier_graphs[tier_name] = chart_utils.growthchart(
+                                    tiername=tier_name,
+                                    dates=all_dates,
+                                    used=used_space)
 
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(tier_graphs)
 
     #Render output in jinja2
-    t = env.get_template('tiers.html').render(tiers=tier_output)
+    t = env.get_template('tiers.html').render(
+        tiers=tier_output,
+        graphs=tier_graphs
+        )
 
     #Open output file / insert new content into output file
     with open(OUTPUT_FILE, 'w') as o_file:
