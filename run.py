@@ -94,8 +94,7 @@ def create_charts(**kwargs):
     #Render output in jinja2
     t = env.get_template('tiers.html').render(
         tiers=tier_output,
-        graphs=tier_graphs
-        )
+        graphs=tier_graphs)
 
     #Open output file / insert new content into output file
     with open(OUTPUT_FILE, 'w') as o_file:

@@ -246,7 +246,7 @@ def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
                 continue
             current_month_output.append(new_row)
 
-    with open('/home/kcup/python/graph/temp', 'a+') as af:
+    with open(ARCHIVE_FILE, 'a+') as af:
         for line in current_month_output:
             af.write(str(line[0]))
             af.write("\n")
