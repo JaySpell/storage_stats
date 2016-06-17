@@ -1,6 +1,7 @@
 import json
 import config
 import datetime
+import csv
 
 CURRENT_FILE = config.CURRENT_FILE
 TIER_CONFIG = config.TIER_CONFIG
@@ -94,6 +95,10 @@ def convert_to_tb(space_bytes):
 def convert_gb_tb(space_gb):
     space_TB = space_gb / 1024
     return int(space_TB)
+
+def convert_byte_gb(space):
+    space_GB = int(space) / 1024 / 1024 / 1024
+    return str(space_GB).encode('utf-8')
 
 def parse_storage_csv(storage_systems, file_to_parse=CURRENT_FILE,
     output_type='dict'):
@@ -196,4 +201,52 @@ def _is_year_old(str_date):
         return False
 
 def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
-    pass
+    '''
+    Function takes the output from SVC and combines it
+    into the pool_history CSV file
+    ARCHIVE_FILE (AF)
+        mdisk_grp, date, total, avail, allocated, used, vol_cap, vol_used,
+            assigned, unassigned, real_config, mdisk_avail, pool_#_mdisks,
+            pool_#_vols
+    CURRENT_FILE (CF)
+        id, mdisk_grp, status, pool_#_mdisks, pool_#_vols, total, extent_size,
+            avail, virt_cap, used, real_cap, overallocation, warning, easy_tier,
+            compression, comp_virt_cap, comp_uncomp_cap, parent_mdisk_grp,
+            parent_mdisk_grp_name, child_mdisk_grp, child_mdisk_grp_cnt,
+            child_mdisk_grp_cap, type, encrypt
+    -- Mappings ---
+        AF[0] = CF[1]
+        AF[1]
+        AF[2] = CF[5]
+        AF[3] = CF[7]
+        AF[4] = CF[7]
+        AF[5] = CF[10]
+        AF[6] = CF[8]
+    '''
+    current_date = datetime.date.today()
+    first_day_month = current_date.replace(day=1)
+    current_month_output = []
+
+    with open(CURRENT_FILE, 'r') as cf:
+        reader = csv.reader(cf)
+        for row in reader:
+            new_row = []
+            if "mdisk_count" not in row:
+                new_row = [
+                        row[1] + "," +                   #mdisk group name
+                        first_day_month + "," +          #date
+                        convert_byte_gb(row[5]) + "," +  #total
+                        convert_byte_gb(row[7]) + "," +  #available
+                        convert_byte_gb(row[7]) + "," +  #allocated
+                        convert_byte_gb(row[10]) + "," + #used
+                        convert_byte_gb(row[8]) + "," +  #vol capacity
+                        ("0," * 8) + "0"                 #zero fill remaining
+                    ]
+            else:
+                continue
+            current_month_output.append(new_row)
+
+    with open('/home/kcup/python/graph/temp', 'a+') as af:
+        for line in current_month_output:
+            af.write(str(line[0]))
+            af.write("\n")

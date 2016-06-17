@@ -43,12 +43,6 @@ def create_charts(**kwargs):
         chart_utils.piechart(tier[1], title=tier[0])
 
     #Create donut charts
-    '''print all_tiers_totals
-    chart_values = {'ids':  }
-
-    for tier in all_tiers_json.items():
-        chart_utils.donutchart(chart_values)
-    '''
 
     #Combine the html into the storage stats
     tier_output = []
