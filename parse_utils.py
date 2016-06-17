@@ -234,7 +234,7 @@ def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
             if "mdisk_count" not in row:
                 new_row = [
                         row[1] + "," +                   #mdisk group name
-                        first_day_month + "," +          #date
+                        str(first_day_month) + "," +          #date
                         convert_byte_gb(row[5]) + "," +  #total
                         convert_byte_gb(row[7]) + "," +  #available
                         convert_byte_gb(row[7]) + "," +  #allocated
