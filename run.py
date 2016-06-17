@@ -102,3 +102,4 @@ def create_charts(**kwargs):
 
 if __name__ == "__main__":
     create_charts()
+    add_data_archive()
