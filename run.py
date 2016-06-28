@@ -61,16 +61,37 @@ def create_charts(**kwargs):
         tier_output.append(updated_output)
         updated_output = []
 
-    '''
-    Create growth charts
-    '''
+
+    #Create growth charts by tier
+    tier_graphs = _get_growth_chart()
+
+    #Create growth charts by svc
+    svc_graphs = _get_growth_chart(return_type="svc")
+
+    #Render output in jinja2
+    t = env.get_template('tiers.html').render(
+        tiers=tier_output,
+        graphs=tier_graphs,
+        svc=svc_graphs)
+
+    #Open output file / insert new content into output file
+    with open(OUTPUT_FILE, 'w') as o_file:
+        o_file.write(t)
+
+
+def _get_growth_chart(return_type="tier"):
 
     #Get last years information
-    last_year = parse_utils.get_last_year()
+    if return_type == "tier":
+        last_year = parse_utils.get_last_year()
+    elif return_type == "svc":
+        last_year = parse_utils.get_last_year(tos="svc")
+    else:
+        return "Not valid return type.."
 
     #Parse data
-    tier_graphs = {}
-    for tier_name, dates in last_year.iteritems():
+    r_graphs = {}
+    for a_name, dates in last_year.iteritems():
         #Sort by date
         all_dates = sorted(dates.keys())
         used_space = []
@@ -83,22 +104,12 @@ def create_charts(**kwargs):
         used_space = map(parse_utils.convert_gb_tb, used_space)
 
         #Create growth charts using data
-        tier_graphs[tier_name] = chart_utils.growthchart(
-                                    tiername=tier_name,
+        r_graphs[a_name] = chart_utils.growthchart(
+                                    tiername=a_name.upper(),
                                     dates=all_dates,
                                     used=used_space)
 
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(tier_graphs)
-
-    #Render output in jinja2
-    t = env.get_template('tiers.html').render(
-        tiers=tier_output,
-        graphs=tier_graphs)
-
-    #Open output file / insert new content into output file
-    with open(OUTPUT_FILE, 'w') as o_file:
-        o_file.write(t)
+    return r_graphs
 
 if __name__ == "__main__":
     create_charts()

@@ -93,12 +93,20 @@ def growthchart(tiername, dates, used, *args, **kwargs):
 
     total_color = "#264BCD"
 
-    if tiername == "Tier Three":
+    if tiername == "TIER ONE":
         tier_color = "#10B256"
-    elif tiername == "Tier Two":
+    elif tiername == "TIER TWO":
         tier_color = "#F7831E"
-    else:
+    elif tiername == "TIER THREE":
         tier_color = "#5350C5"
+    elif tiername == "TMCSVC01":
+        tier_color = "#0E89D2"
+    elif tiername == "TMCSVC02":
+        tier_color ="#C5A150"
+    elif tiername == "MCSVC01":
+        tier_color = "#0E3245"
+    else:
+        tier_color = "#264BCD"
 
     plot.grid.grid_line_alpha = 0.5
     plot.xaxis.axis_label = 'Month'

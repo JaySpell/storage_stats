@@ -9,8 +9,7 @@
     "Tier Two": [
       "tmcv7000-8"
     ],
-    "Tier Three": [
-    ]
+    "Tier Three": []
   },
   "tmcsvc02": {
     "Tier One": [
@@ -23,7 +22,7 @@
       "tmcv7000-4",
       "tmcv7000-5",
       "tmcv7000-6",
-      "tmcv7000-7",
+      "tmcv7000-7"
     ],
     "Tier Three": [
       "TMC-DS3500-01",
@@ -33,8 +32,7 @@
     ]
   },
   "mcsvc01": {
-    "Tier One": [
-    ],
+    "Tier One": [],
     "Tier Two": [
       "mcv7000-1"
     ],

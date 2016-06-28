@@ -9,11 +9,20 @@
 {%- endfor %}
 {% endblock %}
 {% block graphs %}
-  {%- for tier_name, values in graphs.iteritems() %}
-    {%- for graph in values %}
-      <div class="row">
+  {%- for tier_name, tier_values in graphs.iteritems() %}
+    {%- for tier_graph in tier_values %}
+      <div class="tier row">
         <div class="col-md-9">
-          {{ graph }}
+          {{ tier_graph }}
+        </div>
+      </div>
+    {%- endfor %}
+  {%- endfor %}
+  {%- for svc_name, svc_values in svc.iteritems() %}
+    {%- for svc_graph in svc_values %}
+      <div class="svc row">
+        <div class="col-md-9">
+          {{ svc_graph }}
         </div>
       </div>
     {%- endfor %}

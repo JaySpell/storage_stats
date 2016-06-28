@@ -126,26 +126,47 @@ def parse_storage_csv(storage_systems, file_to_parse=CURRENT_FILE,
 def growth_data():
     pass
 
-def get_last_year():
+def get_last_year(tos="tier"):
     #Get data from last year - ARCHIVE_FILE
     data_last_year = find_data_year_old()
 
-    #Get info per SVC
-    #svc_stats = _get_svc_stats(data_last_year)
+    if tos == "tier":
+        #Get info per tier
+        r_stats = _get_tier_stats(data_last_year)
 
-    #Get info per tier
-    tier_stats = _get_tier_stats(data_last_year)
+    elif tos == "svc":
+        r_stats = _get_svc_stats(data_last_year)
 
-    '''last_year = {"last_year": [
-                    {"svc": svc_stats},
-                    {"tier": tier_stats}
-                ]}'''
-    return tier_stats
+    return r_stats
 
 def _get_svc_stats(data_set):
-    '''with open(SVC_FILE, 'r') as svc_json:
+    sorted_svc = []
+    svc_return = {}
+
+    with open(SVC_FILE, 'r') as svc_json:
         svc = json.load(svc_json)
-        for '''
+
+    s_data = []
+    for a_svc, tiers in svc.iteritems():
+        svc_return[a_svc] = {}
+        for tier, storage in tiers.iteritems():
+            for row in data_set:
+                name = row.split(',')[0]
+                if name in storage:
+                    row_date = datetime.datetime.strptime(row.split(',')[1],
+                        "%Y-%m-%d")
+                    if row_date not in svc_return[a_svc]:
+                        svc_return[a_svc][row_date] = [
+                            row.split(',')[5],
+                            row.split(',')[3]
+                            ]
+                    svc_return[a_svc][row_date] = [
+                        float(svc_return[a_svc][row_date][0]) +
+                                float(row.split(',')[5]),
+                        float(svc_return[a_svc][row_date][1]) +
+                                float(row.split(',')[3])
+                        ]
+    return svc_return
 
 def _get_tier_stats(data_set):
     sorted_tiers = []
@@ -164,14 +185,14 @@ def _get_tier_stats(data_set):
                     "%Y-%m-%d")
                 if row_date not in tier_return[tier]:
                     tier_return[tier][row_date] = [
-                            row.split(',')[5],
-                            row.split(',')[3]
+                        row.split(',')[5],
+                        row.split(',')[3]
                         ]
                 tier_return[tier][row_date] = [
-                        float(tier_return[tier][row_date][0]) +
-                                float(row.split(',')[5]),
-                        float(tier_return[tier][row_date][1]) +
-                                float(row.split(',')[3])
+                    float(tier_return[tier][row_date][0]) +
+                            float(row.split(',')[5]),
+                    float(tier_return[tier][row_date][1]) +
+                            float(row.split(',')[3])
                     ]
 
     return tier_return
