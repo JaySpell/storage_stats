@@ -95,22 +95,27 @@ def _get_growth_chart(return_type="tier"):
         #Sort by date
         all_dates = sorted(dates.keys())
         used_space = []
+        total_space = []
 
         #Get used space
         for date in sorted(dates):
             used_space.append(dates[date][0])
+            total_space.append(dates[date][2])
 
         #Convert to TB from the GB
         used_space = map(parse_utils.convert_gb_tb, used_space)
+        total_space = map(parse_utils.convert_gb_tb, total_space)
 
         #Create growth charts using data
         r_graphs[a_name] = chart_utils.growthchart(
                                     tiername=a_name.upper(),
                                     dates=all_dates,
-                                    used=used_space)
+                                    used=used_space,
+                                    total=total_space)
 
     return r_graphs
 
 if __name__ == "__main__":
     create_charts()
-    parse_utils.add_data_archive()
+    #parse_utils.get_last_year()
+    #parse_utils.add_data_archive()

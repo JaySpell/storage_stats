@@ -158,13 +158,18 @@ def _get_svc_stats(data_set):
                     if row_date not in svc_return[a_svc]:
                         svc_return[a_svc][row_date] = [
                             row.split(',')[5],
-                            row.split(',')[3]
+                            row.split(',')[3],
+                            row.split(',')[2]
                             ]
                     svc_return[a_svc][row_date] = [
                         float(svc_return[a_svc][row_date][0]) +
                                 float(row.split(',')[5]),
                         float(svc_return[a_svc][row_date][1]) +
-                                float(row.split(',')[3])
+                                float(row.split(',')[3]),
+                        float(svc_return[a_svc][row_date][2]) + (
+                                    float(row.split(',')[5]) +
+                                    float(row.split(',')[3])
+                                )
                         ]
     return svc_return
 
@@ -186,13 +191,18 @@ def _get_tier_stats(data_set):
                 if row_date not in tier_return[tier]:
                     tier_return[tier][row_date] = [
                         row.split(',')[5],
-                        row.split(',')[3]
+                        row.split(',')[3],
+                        row.split(',')[2]
                         ]
                 tier_return[tier][row_date] = [
                     float(tier_return[tier][row_date][0]) +
                             float(row.split(',')[5]),
                     float(tier_return[tier][row_date][1]) +
-                            float(row.split(',')[3])
+                            float(row.split(',')[3]),
+                    float(tier_return[tier][row_date][2]) + (
+                                float(row.split(',')[5]) +
+                                float(row.split(',')[3])
+                            )
                     ]
 
     return tier_return

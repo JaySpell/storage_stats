@@ -83,7 +83,7 @@ def donutchart(*args, **kwargs):
     output_file(out_file)
     save(d)
 
-def growthchart(tiername, dates, used, *args, **kwargs):
+def growthchart(tiername, dates, used, total, *args, **kwargs):
     plot = figure(tools="pan, wheel_zoom, box_zoom, resize, save",
                 plot_width=900,
                 plot_height=300,
@@ -112,6 +112,7 @@ def growthchart(tiername, dates, used, *args, **kwargs):
     plot.xaxis.axis_label = 'Month'
     plot.yaxis.axis_label = 'Space in TB'
     plot.line(dates, used, color=tier_color, line_width=2)
+    plot.line(dates, total, color=total_color, line_width=2)
     plot.ygrid.grid_line_color = "#726F78"
     plot.ygrid.grid_line_dash = [6, 4]
     plot.ygrid.grid_line_alpha = 0.5
