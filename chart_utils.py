@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import datetime
 from bokeh.embed import components
+import config
 
 def piechart(percents, **kwargs):
     plot = None
@@ -83,37 +84,47 @@ def donutchart(*args, **kwargs):
     output_file(out_file)
     save(d)
 
-def growthchart(tiername, dates, used, total, *args, **kwargs):
-    plot = figure(tools="pan, wheel_zoom, box_zoom, resize, save",
+def growthchart(tiername, dates, used, total, colors, *args, **kwargs):
+    plot = figure(tools="pan, wheel_zoom, box_zoom, resize, save, hover",
                 plot_width=900,
                 plot_height=300,
                 toolbar_location="above",
                 x_axis_type="datetime")
     plot.title = "One Year of Growth " + tiername
+    colormap = {
+        "TIER ONE": "#10B256",
+        "TIER TWO": "#F7831E",
+        "TIER THREE": "#5350C5",
+        "TMCSVC01": "#0E89D2",
+        "TMCSVC02": "#C5A150",
+        "MCSVC01": "#0E3245",
+        "OTHER": "#264BCD",
+        "TOTAL": "#264BCD",
+        "GRID": "#726F78"
+    }
 
-    total_color = "#264BCD"
+    source = ColumnDataSource(
+            data = dict(
+                space_used = used,
+                space_total = total,
+                space_date = dates,
+            )
+        )
 
-    if tiername == "TIER ONE":
-        tier_color = "#10B256"
-    elif tiername == "TIER TWO":
-        tier_color = "#F7831E"
-    elif tiername == "TIER THREE":
-        tier_color = "#5350C5"
-    elif tiername == "TMCSVC01":
-        tier_color = "#0E89D2"
-    elif tiername == "TMCSVC02":
-        tier_color ="#C5A150"
-    elif tiername == "MCSVC01":
-        tier_color = "#0E3245"
-    else:
-        tier_color = "#264BCD"
+    hover = plot.select(dict(type=HoverTool))
+    hover.tooltips = [
+            ("Used", "@space_used"),
+            ("Total", "@space_total"),
+        ]
 
     plot.grid.grid_line_alpha = 0.5
     plot.xaxis.axis_label = 'Month'
     plot.yaxis.axis_label = 'Space in TB'
-    plot.line(dates, used, color=tier_color, line_width=2)
-    plot.line(dates, total, color=total_color, line_width=2)
-    plot.ygrid.grid_line_color = "#726F78"
+    plot.line('space_date', 'space_used', color=colors['colormap'][tiername],
+            line_width=2, legend='Used', source=source)
+    plot.line('space_date', 'space_total', color=colors['colormap']['TOTAL'],
+            line_width=2, legend='Total', source=source)
+    plot.ygrid.grid_line_color = colors['colormap']['GRID']
     plot.ygrid.grid_line_dash = [6, 4]
     plot.ygrid.grid_line_alpha = 0.5
     plot.xgrid.grid_line_color = None

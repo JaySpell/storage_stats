@@ -6,11 +6,12 @@
         "tmcflash02",
         "tmcflash03",
         "tmcflash04",
-        "tmcds8800_mdg01"
+        "TMCDS8800_mdg01"
       ],
     "Tier Two":
       [
         "tmcv7000-1_msar_mirrors_only",
+        "tmcv7000-1",
         "tmcv7000-2",
         "tmcv7000-3",
         "tmcv7000-4",

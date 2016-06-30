@@ -89,6 +89,10 @@ def _get_growth_chart(return_type="tier"):
     else:
         return "Not valid return type.."
 
+    COLOR_FILE = config.COLOR_FILE
+    with open(COLOR_FILE, 'r') as colors_json:
+        colors = json.load(colors_json)
+
     #Parse data
     r_graphs = {}
     for a_name, dates in last_year.iteritems():
@@ -111,11 +115,10 @@ def _get_growth_chart(return_type="tier"):
                                     tiername=a_name.upper(),
                                     dates=all_dates,
                                     used=used_space,
-                                    total=total_space)
+                                    total=total_space,
+                                    colors=colors)
 
     return r_graphs
 
 if __name__ == "__main__":
     create_charts()
-    #parse_utils.get_last_year()
-    #parse_utils.add_data_archive()
