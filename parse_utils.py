@@ -135,6 +135,7 @@ def get_last_year(tos="tier"):
         r_stats = _get_tier_stats(data_last_year)
 
     elif tos == "svc":
+        #Get info per svc
         r_stats = _get_svc_stats(data_last_year)
 
     return r_stats
@@ -181,6 +182,9 @@ def _get_tier_stats(data_set):
         tiers = json.load(tier_json)
 
     t_data = []
+
+    #Find data by pulling all storage systems from tier config json and
+    #parsing the archive file for stats of each storage system in tier
     for tier, storage in tiers['storage_tiers'].iteritems():
         tier_return[tier] = {}
         for row in data_set:
@@ -188,20 +192,26 @@ def _get_tier_stats(data_set):
             if name in storage:
                 row_date = datetime.datetime.strptime(row.split(',')[1],
                     "%Y-%m-%d")
+
+                #If dict does not have the date of row already in return create
+                #new row with date
                 if row_date not in tier_return[tier]:
                     tier_return[tier][row_date] = [
-                        row.split(',')[5],
-                        row.split(',')[3],
-                        row.split(',')[2]
+                        row.split(',')[5], #used
+                        row.split(',')[3], #available
+                        row.split(',')[2]  #total
                         ]
+
+                #Add new data to existing data within the dict for the storage
+                #system and date
                 tier_return[tier][row_date] = [
                     float(tier_return[tier][row_date][0]) +
-                            float(row.split(',')[5]),
+                            float(row.split(',')[5]), #used
                     float(tier_return[tier][row_date][1]) +
-                            float(row.split(',')[3]),
+                            float(row.split(',')[3]), #available
                     float(tier_return[tier][row_date][2]) + (
                                 float(row.split(',')[5]) +
-                                float(row.split(',')[3])
+                                float(row.split(',')[3]) #total
                             )
                     ]
 
@@ -246,13 +256,13 @@ def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
             parent_mdisk_grp_name, child_mdisk_grp, child_mdisk_grp_cnt,
             child_mdisk_grp_cap, type, encrypt
     -- Mappings ---
-        AF[0] = CF[1]
-        AF[1]
-        AF[2] = CF[5]
-        AF[3] = CF[7]
-        AF[4] = CF[7]
-        AF[5] = CF[10]
-        AF[6] = CF[8]
+        AF[0] = CF[1]  = mdisk group name
+        AF[1]          = date
+        AF[2] = CF[5]  = total
+        AF[3] = CF[7]  = available
+        AF[4] = CF[7]  = allocated (used)
+        AF[5] = CF[10] = used space
+        AF[6] = CF[8]  = volume capacity
     '''
     current_date = datetime.date.today()
     first_day_month = current_date.replace(day=1)
@@ -265,7 +275,7 @@ def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
             if "mdisk_count" not in row:
                 new_row = [
                         row[1] + "," +                   #mdisk group name
-                        str(first_day_month) + "," +          #date
+                        str(first_day_month) + "," +     #date
                         convert_byte_gb(row[5]) + "," +  #total
                         convert_byte_gb(row[7]) + "," +  #available
                         convert_byte_gb(row[7]) + "," +  #allocated

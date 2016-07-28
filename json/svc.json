@@ -34,7 +34,8 @@
   "mcsvc01": {
     "Tier One": [],
     "Tier Two": [
-      "mcv7000-1"
+      "mcv7000-1",
+      "mcv7000-2"
     ],
     "Tier Three": [
       "mcDS3501_mdg01",

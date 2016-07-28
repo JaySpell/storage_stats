@@ -61,7 +61,6 @@ def create_charts(**kwargs):
         tier_output.append(updated_output)
         updated_output = []
 
-
     #Create growth charts by tier
     tier_graphs = _get_growth_chart()
 
