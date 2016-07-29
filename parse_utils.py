@@ -163,16 +163,15 @@ def _get_svc_stats(data_set):
                             row.split(',')[3],
                             row.split(',')[2]
                             ]
-                    svc_return[a_svc][row_date] = [
-                        float(svc_return[a_svc][row_date][0]) +
-                                float(row.split(',')[5]),
-                        float(svc_return[a_svc][row_date][1]) +
-                                float(row.split(',')[3]),
-                        float(svc_return[a_svc][row_date][2]) + (
-                                    float(row.split(',')[5]) +
-                                    float(row.split(',')[3])
-                                )
-                        ]
+                    else:
+                        svc_return[a_svc][row_date] = [
+                            float(svc_return[a_svc][row_date][0]) +
+                                    float(row.split(',')[5]),
+                            float(svc_return[a_svc][row_date][1]) +
+                                    float(row.split(',')[3]),
+                            float(svc_return[a_svc][row_date][2]) +
+                                        float(row.split(',')[2])
+                            ]
     return svc_return
 
 def _get_tier_stats(data_set):
@@ -185,6 +184,9 @@ def _get_tier_stats(data_set):
     #Find data by pulling all storage systems from tier config json and
     #parsing the archive file for stats of each storage system in tier
     for tier, storage in tiers['storage_tiers'].iteritems():
+        if tier == 'Tier Three':
+            print "Break here for tier three..."
+
         tier_return[tier] = {}
         for row in data_set:
             name = row.split(',')[0]
@@ -203,18 +205,17 @@ def _get_tier_stats(data_set):
 
                 #Add new data to existing data within the dict for the storage
                 #system and date [used, available, total]
-                tier_return[tier][row_date] = [
-                    float(tier_return[tier][row_date][0]) +
-                            float(row.split(',')[5]),
-                    float(tier_return[tier][row_date][1]) +
-                            float(row.split(',')[3]),
-                    float(tier_return[tier][row_date][2]) + (
-                                float(row.split(',')[2])
-                            )
-                    ]
+                else:
+                    tier_return[tier][row_date] = [
+                        float(tier_return[tier][row_date][0]) +
+                                float(row.split(',')[5]),
+                        float(tier_return[tier][row_date][1]) +
+                                float(row.split(',')[3]),
+                        float(tier_return[tier][row_date][2]) + (
+                                    float(row.split(',')[2])
+                                )
+                        ]
 
-    pp = pprint.PrettyPrinter(depth=20)
-    pp.pprint(tier_return)
     return tier_return
 
 def find_data_year_old(filename=ARCHIVE_FILE):

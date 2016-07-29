@@ -80,7 +80,7 @@ def create_charts(**kwargs):
 
 def _get_growth_chart(return_type="tier"):
 
-    #Get last years information
+    #Get last years information using get_last_year from parse_utils
     if return_type == "tier":
         last_year = parse_utils.get_last_year()
     elif return_type == "svc":
