@@ -2,6 +2,7 @@ import json
 import config
 import datetime
 import csv
+import pprint
 
 CURRENT_FILE = config.CURRENT_FILE
 TIER_CONFIG = config.TIER_CONFIG
@@ -181,8 +182,6 @@ def _get_tier_stats(data_set):
     with open(TIER_CONFIG, 'r') as tier_json:
         tiers = json.load(tier_json)
 
-    t_data = []
-
     #Find data by pulling all storage systems from tier config json and
     #parsing the archive file for stats of each storage system in tier
     for tier, storage in tiers['storage_tiers'].iteritems():
@@ -203,18 +202,19 @@ def _get_tier_stats(data_set):
                         ]
 
                 #Add new data to existing data within the dict for the storage
-                #system and date
+                #system and date [used, available, total]
                 tier_return[tier][row_date] = [
                     float(tier_return[tier][row_date][0]) +
-                            float(row.split(',')[5]), #used
+                            float(row.split(',')[5]),
                     float(tier_return[tier][row_date][1]) +
-                            float(row.split(',')[3]), #available
+                            float(row.split(',')[3]),
                     float(tier_return[tier][row_date][2]) + (
-                                float(row.split(',')[5]) +
-                                float(row.split(',')[3]) #total
+                                float(row.split(',')[2])
                             )
                     ]
 
+    pp = pprint.PrettyPrinter(depth=20)
+    pp.pprint(tier_return)
     return tier_return
 
 def find_data_year_old(filename=ARCHIVE_FILE):
