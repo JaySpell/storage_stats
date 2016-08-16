@@ -168,5 +168,4 @@ def _percent_growth(return_type='tier'):
     return r_percents
 
 if __name__ == "__main__":
-    #create_charts()
-    pass
+    create_charts()

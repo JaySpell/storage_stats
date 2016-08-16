@@ -140,93 +140,19 @@ def get_last_year(tos="tier"):
 
     return r_stats
 
-'''
-def _get_svc_stats(data_set):
-    svc_return = {}
-
-    with open(SVC_FILE, 'r') as svc_json:
-        svc = json.load(svc_json)
-
-    for a_svc, tiers in svc.iteritems():
-        svc_return[a_svc] = {}
-        for tier, storage in tiers.iteritems():
-            for row in data_set:
-                name = row.split(',')[0]
-                if name in storage:
-                    row_date = datetime.datetime.strptime(row.split(',')[1],
-                        "%Y-%m-%d")
-                    if row_date not in svc_return[a_svc]:
-                        svc_return[a_svc][row_date] = [
-                            row.split(',')[5],
-                            row.split(',')[3],
-                            row.split(',')[2]
-                            ]
-                    else:
-                        svc_return[a_svc][row_date] = [
-                            float(svc_return[a_svc][row_date][0]) +
-                                    float(row.split(',')[5]),
-                            float(svc_return[a_svc][row_date][1]) +
-                                    float(row.split(',')[3]),
-                            float(svc_return[a_svc][row_date][2]) +
-                                        float(row.split(',')[2])
-                            ]
-    return svc_return
-
-def _get_tier_stats(data_set):
-    sorted_tiers = []
-    tier_return = {}
-
-    with open(TIER_CONFIG, 'r') as tier_json:
-        tiers = json.load(tier_json)
-
-    #Find data by pulling all storage systems from tier config json and
-    #parsing the archive file for stats of each storage system in tier
-    for tier, storage in tiers['storage_tiers'].iteritems():
-        tier_return[tier] = {}
-        for row in data_set:
-            name = row.split(',')[0]
-            if name in storage:
-                row_date = datetime.datetime.strptime(row.split(',')[1],
-                    "%Y-%m-%d")
-
-                #If dict does not have the date of row already in return create
-                #new row with date
-                if row_date not in tier_return[tier]:
-                    tier_return[tier][row_date] = [
-                        row.split(',')[5], #used
-                        row.split(',')[3], #available
-                        row.split(',')[2]  #total
-                        ]
-
-                #Add new data to existing data within the dict for the storage
-                #system and date [used, available, total]
-                else:
-                    tier_return[tier][row_date] = [
-                        float(tier_return[tier][row_date][0]) +
-                                float(row.split(',')[5]),
-                        float(tier_return[tier][row_date][1]) +
-                                float(row.split(',')[3]),
-                        float(tier_return[tier][row_date][2]) + (
-                                    float(row.split(',')[2])
-                                )
-                        ]
-
-    return tier_return
-'''
-
 def _get_stats(data_set, tos='tier', **kwargs):
     _return = {}
 
     if tos == 'tier':
         file_to_open = TIER_CONFIG
-        _return = _get_t_stats(data_set, file_to_open)
+        _return = _get_tier_stats(data_set, file_to_open)
     elif tos == 'svc':
         file_to_open = SVC_FILE
-        _return = _get_s_stats(data_set, file_to_open)
+        _return = _get_svc_stats(data_set, file_to_open)
 
     return _return
 
-def _get_t_stats(data_set, file_to_open):
+def _get_tier_stats(data_set, file_to_open):
     _return = {}
 
     with open(file_to_open, 'r') as open_json:
@@ -239,7 +165,7 @@ def _get_t_stats(data_set, file_to_open):
 
     return _return
 
-def _get_s_stats(data_set, file_to_open):
+def _get_svc_stats(data_set, file_to_open):
     _return = {}
 
     with open(SVC_FILE, 'r') as svc_json:
