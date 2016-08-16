@@ -1,5 +1,6 @@
 import parse_utils
 import chart_utils
+import datetime
 import json
 import os
 import config
@@ -67,6 +68,9 @@ def create_charts(**kwargs):
     #Create growth charts by svc
     svc_graphs = _get_growth_chart(return_type="svc")
 
+    #Create % growth area
+
+
     #Render output in jinja2
     t = env.get_template('tiers.html').render(
         tiers=tier_output,
@@ -77,8 +81,20 @@ def create_charts(**kwargs):
     with open(OUTPUT_FILE, 'w') as o_file:
         o_file.write(t)
 
-
 def _get_growth_chart(return_type="tier"):
+    """creates growth charts
+
+    Creates a set of bokeh charts utilizing the data from the last year
+    that is pulled utilizing parse_utils.get_last_year -- chart_utils is then
+    used to take that data and create bokeh charts
+
+    Args:
+        return_type: either 'tier' or 'svc' can be passed
+
+    Returns:
+        A dict with keys mapping to either tier or svc name and the values
+        containing the bokeh charts which are based on div / jscript
+    """
 
     #Get last years information using get_last_year from parse_utils
     if return_type == "tier":
@@ -119,5 +135,38 @@ def _get_growth_chart(return_type="tier"):
 
     return r_graphs
 
+def _percent_growth(return_type='tier'):
+    r_percents = {}
+
+    #Data from last year
+    data_last_year = parse_utils.get_last_year(tos=return_type)
+
+    #Get dates
+    today = datetime.date.today()
+    first = today.replace(day=1)
+    today_format = datetime.datetime.strptime(
+            first.strftime("%Y-%m-%d"), "%Y-%m-%d"
+        )
+    lastyear = first - datetime.timedelta(days=182)
+    lastyear_format = datetime.datetime.strptime(
+            lastyear.strftime("%Y-%m-%d"), "%Y-%m-%d"
+        )
+
+
+    for a_name in data_last_year.iterkeys():
+        print "Data last year %d" % data_last_year[a_name][today_format][0]
+        print "Data this year %d" % data_last_year[a_name][lastyear_format][0]
+        diff = float(
+                data_last_year[a_name][today_format][0] -
+                data_last_year[a_name][lastyear_format][0]
+            )
+        print "Difference %d" % diff
+        percent = float(diff / data_last_year[a_name][today_format][0])
+        print "Percent change %f" % percent
+        r_percents[a_name] = percent
+
+    return r_percents
+
 if __name__ == "__main__":
-    create_charts()
+    #create_charts()
+    pass
