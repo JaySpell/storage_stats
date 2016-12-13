@@ -39,11 +39,9 @@ def create_charts(**kwargs):
     for tiers in all_tiers_totals.iteritems():
         all_tiers_percents[tiers[0]] = parse_utils.space_percent(tiers[1])
 
-    '''Create pie charts'''
+    #Create pie charts
     for tier in all_tiers_percents.iteritems():
         chart_utils.piechart(tier[1], title=tier[0])
-
-    #Create donut charts
 
     #Combine the html into the storage stats
     tier_output = []
@@ -68,8 +66,10 @@ def create_charts(**kwargs):
     #Create growth charts by svc
     svc_graphs = _get_growth_chart(return_type="svc")
 
-    #Create % growth area
-
+    #Create Excel file
+    last_year = (parse_utils.get_last_year(tos='tier'),
+                 parse_utils.get_last_year(tos='svc'))
+    parse_utils._create_excel(last_year)
 
     #Render output in jinja2
     t = env.get_template('tiers.html').render(

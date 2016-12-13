@@ -8,6 +8,7 @@ CURRENT_FILE = config.CURRENT_FILE
 TIER_CONFIG = config.TIER_CONFIG
 ARCHIVE_FILE = config.ARCHIVE_FILE
 SVC_FILE = config.SVC_FILE
+EXCEL_FILE = config.EXCEL_FILE
 
 def group_totals(storage):
     free_total = int(0)
@@ -284,3 +285,32 @@ def add_data_archive(a_file=ARCHIVE_FILE, c_file=CURRENT_FILE):
         for line in current_month_output:
             af.write(str(line[0]))
             af.write("\n")
+
+def _create_excel(last_year):
+    e_sheets = {}
+    for group in last_year:
+        for a_group, sheet in group.items():
+            e_sheets[a_group] = {}
+            for date, values in sheet.items():
+                e_sheets[a_group][date] = {
+                    'Free': values[0],
+                    'Used': values[1],
+                    'Total': values[2]
+                }
+
+    def add_tb_row(df):
+        size_tb = lambda sizegb: sizegb / 1024
+        for col in df:
+            space_tb = []
+            space_tb.append(map(size_tb, df[col]))
+            df[col+'_In_TB'] = space_tb[0]
+        return df
+
+    writer = pd.ExcelWriter(EXCEL_FILE, engine='xlsxwriter')
+    for group, sheet in e_sheets.items():
+        sheet_name = group
+        df = pd.DataFrame.from_dict(sheet)
+        df = df.T
+        df = add_tb_row(df)
+        df.to_excel(writer, sheet_name=sheet_name)
+    writer.save()
