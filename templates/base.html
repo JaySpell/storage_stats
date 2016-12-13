@@ -51,6 +51,7 @@
                 SHOW SVC CHARTS
               </button>
             </div>
+
             <div class="change svc">
               <button type="button" class="btn btn-success">
                 SHOW TIER CHART
@@ -60,6 +61,13 @@
           </div>
         </div>
         {% block graphs %} {% endblock %}
+    <div class="row">
+      <div class="col-md-4">
+         <a href="/home/jspell/Documents/dev/charts/storage_stats/test.xlsx" download="stats.xlsx">
+        <button type="button" class="btn btn-success">
+           <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+         </button>
+      </div>
     </div>
 
 </html>

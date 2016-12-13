@@ -3,6 +3,7 @@ import config
 import datetime
 import csv
 import pprint
+import pandas as pd
 
 CURRENT_FILE = config.CURRENT_FILE
 TIER_CONFIG = config.TIER_CONFIG
